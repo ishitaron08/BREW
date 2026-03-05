@@ -1,49 +1,83 @@
-# CineInsight — AI Movie Intelligence
+# AI Movie Insight Builder
 
-> Enter any IMDb movie ID and get AI-powered audience sentiment analysis, cast details, ratings, and plot summary — all in a cinematic glassmorphism UI.
+A modern web application that allows users to enter an IMDb movie ID and get comprehensive movie details along with AI-powered audience sentiment analysis.
+
+![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4-38B2AC?style=flat-square&logo=tailwind-css)
 
 ## Live Demo
 
-🔗 **[Deployed on Vercel →](#)** *(link added after deployment)*
+🔗 **[Deployed on Vercel →](#)** *(Update with your deployed URL)*
 
 ---
 
 ## Features
 
-- **Movie Details** — Title, poster, year, runtime, director, genres (via OMDB)
-- **Cast Grid** — Profile photos, character names (via TMDB)
-- **Plot Summary** — Short plot display
-- **AI Audience Sentiment** — 2-3 sentence AI summary + positive/mixed/negative classification (via OpenRouter → Gemini)
-- **Glassmorphism Design** — Frosted glass panels, animated gradient backgrounds, floating particles
-- **Responsive Design** — Works on mobile, tablet, and desktop
-- **Graceful Error Handling** — 404 for unknown movies, retry on errors, validation for badly-formed IDs
-- **Loading Skeletons** — Cinematic shimmer skeletons during data fetch
-- **Framer Motion Animations** — Staggered entry, scroll-triggered reveals, shake on invalid input
+### Movie Details
+- Title and poster image
+- Release year and runtime
+- IMDb rating
+- Genre tags
+- Plot summary
+- Director information
+
+### Cast Information
+- Displays top 10 cast members
+- Profile photos and character names
+- Animated grid layout
+
+### User Reviews
+- Audience reviews with ratings
+- Expandable review content
+- Helpful vote counts
+
+### AI-Powered Insights
+Leverages AI (via OpenRouter's free Llama 3.1 model) to provide:
+- Summary of audience sentiment
+- Sentiment classification (positive/mixed/negative)
+- Sentiment score (0-100)
+- Key themes mentioned in reviews
+- Audience reaction summary
+- Watch recommendation
+
+### Modern UI/UX
+- Beautiful gradient design with glassmorphism effects
+- Smooth animations powered by Framer Motion
+- Fully responsive (mobile, tablet, desktop)
+- Dark mode support (system preference)
+- Animated loading states
+- Comprehensive error handling with retry functionality
 
 ---
 
 ## Tech Stack
 
 | Layer | Technology | Rationale |
-|---|---|---|
-| Framework | **Next.js 16** (App Router) | Single codebase for frontend + backend; Server Components for fast initial load; Route Handlers replace a separate Node.js server |
-| Styling | **Tailwind CSS v4** | Utility-first, rapid iteration, consistent dark cinematic theme |
-| Animations | **Framer Motion** | Premium-feel animations without heavy custom CSS |
-| AI | **OpenRouter** (free Gemini 2.0 Flash) | Free tier with no rate limits; fastest model for summarizing reviews |
-| Validation | **Zod** | Runtime type-safe validation for API inputs and IMDb ID format |
-| Testing | **Jest + React Testing Library** | Industry standard for Next.js apps |
-| Deployment | **Vercel** | 1-click deploy, native Next.js support, environment variables |
+|-------|------------|-----------|
+| **Framework** | Next.js 16 (App Router) | Single codebase for frontend + backend; Server Components for fast load; API routes as serverless functions |
+| **Frontend** | React 19 | Latest React for optimal performance and concurrent features |
+| **Language** | TypeScript 5 | Type safety, better DX, catches errors at compile time |
+| **Styling** | Tailwind CSS 4 | Utility-first CSS for rapid, consistent styling |
+| **Animations** | Framer Motion | Production-ready animations for premium feel |
+| **Icons** | Lucide React | Beautiful, consistent, tree-shakeable icons |
+| **Scraping** | Cheerio | Fast HTML parsing for IMDb data extraction |
+| **AI** | OpenRouter (Llama 3.1) | Free tier AI access without credit card |
+| **Deployment** | Vercel | 1-click deploy, native Next.js support |
 
-### Why no separate Node.js server?
+### Why This Stack?
 
-Next.js App Router Route Handlers (`app/api/*/route.ts`) run server-side and can securely access environment variables, make external API calls, and be deployed to Vercel as serverless functions — eliminating the need for a separate backend service.
+1. **Next.js 16**: Provides both frontend and backend in one framework, with excellent deployment options on Vercel. The App Router enables Server Components for faster initial page loads.
 
-### Why OpenRouter instead of direct Gemini SDK?
+2. **TypeScript**: Catches errors early, improves code quality, and provides excellent IDE support for maintainability.
 
-OpenRouter provides a unified API gateway to multiple AI models with generous free tiers. Using `google/gemini-2.0-flash-exp:free` through OpenRouter means:
-- **No rate limits** — the free tier is generous for demo/evaluation
-- **No separate Google API key** — a single OpenRouter key handles everything
-- **Easy model switching** — swap to any OpenRouter model by changing one constant
+3. **Tailwind CSS 4**: Rapid UI development with consistent design tokens. No context switching between CSS and JSX.
+
+4. **Web Scraping (Cheerio)**: Since OMDB/TMDB API keys were unavailable, direct IMDb scraping provides reliable, up-to-date data without API key dependencies.
+
+5. **OpenRouter API**: Offers free access to powerful AI models (Llama 3.1 8B) without requiring credit card or payment setup. Falls back to local sentiment analysis if unavailable.
+
+6. **Framer Motion**: Declarative animations that enhance user experience without complex CSS keyframes.
 
 ---
 
@@ -51,37 +85,35 @@ OpenRouter provides a unified API gateway to multiple AI models with generous fr
 
 ### Prerequisites
 
-- Node.js 18+
-- npm 9+
-- Three free API keys (details below)
+- Node.js 18+ installed
+- npm or yarn package manager
+- OpenRouter API key (free at [openrouter.ai](https://openrouter.ai))
 
 ### 1. Clone & Install
 
 ```bash
-git clone <your-repo-url>
-cd imdb-insight
+git clone <repository-url>
+cd BREW
 npm install
 ```
 
 ### 2. Configure Environment Variables
 
-Create a `.env.local` file in the project root:
-
-```env
-# OMDB API Key — https://www.omdbapi.com/apikey.aspx (free, 1000 req/day)
-OMDB_API_KEY=your_omdb_api_key_here
-
-# TMDB API Read Access Token (Bearer token, starts with "eyJ...")
-# Get from: https://www.themoviedb.org/settings/api → "API Read Access Token"
-TMDB_API_KEY=your_tmdb_read_access_token_here
-
-# OpenRouter API Key — https://openrouter.ai/keys (free models available)
-OPENROUTER_API_KEY=your_openrouter_api_key_here
+```bash
+cp .env.example .env
 ```
 
-> **Important:** TMDB requires the **API Read Access Token (v4 auth)** — the long `eyJ...` Bearer token, NOT the short API key (v3).
+Edit `.env` and add your OpenRouter API key:
 
-### 3. Run Locally
+```env
+# OpenRouter API Key — https://openrouter.ai/keys
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+
+# Site URL (update for production)
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
+
+### 3. Run Development Server
 
 ```bash
 npm run dev
@@ -92,9 +124,7 @@ Open [http://localhost:3000](http://localhost:3000) and enter an IMDb ID like `t
 ### 4. Run Tests
 
 ```bash
-npm test              # run all tests once
-npm run test:watch    # watch mode
-npm run test:coverage # with coverage report
+npm test
 ```
 
 ### 5. Build for Production
@@ -108,13 +138,62 @@ npm start
 
 ## Deployment to Vercel
 
-1. Push to a GitHub repository
+1. Push your code to GitHub
 2. Go to [vercel.com](https://vercel.com) → **New Project** → Import your repo
 3. Under **Environment Variables**, add:
-   - `OMDB_API_KEY`
-   - `TMDB_API_KEY`
-   - `OPENROUTER_API_KEY`
+   - `OPENROUTER_API_KEY` - Your OpenRouter API key
+   - `NEXT_PUBLIC_SITE_URL` - Your Vercel deployment URL
 4. Click **Deploy**
+
+Your app will be live in ~60 seconds!
+
+---
+
+## Usage
+
+1. Enter an IMDb ID in the search box (e.g., `tt0133093`)
+2. Click "Search" or press Enter
+3. View movie details, cast, reviews, and AI-generated insights
+
+### Example IMDb IDs
+
+| IMDb ID | Movie |
+|---------|-------|
+| `tt0133093` | The Matrix |
+| `tt1375666` | Inception |
+| `tt0468569` | The Dark Knight |
+| `tt0111161` | The Shawshank Redemption |
+
+---
+
+## Project Structure
+
+```
+BREW/
+├── app/
+│   ├── api/
+│   │   ├── movie/route.ts        # IMDb scraping endpoint
+│   │   └── insights/route.ts     # AI sentiment analysis
+│   ├── components/
+│   │   ├── CastList.tsx          # Cast member grid
+│   │   ├── ErrorDisplay.tsx      # Error state with retry
+│   │   ├── InsightsCard.tsx      # AI insights display
+│   │   ├── LoadingSpinner.tsx    # Animated loader
+│   │   ├── MovieCard.tsx         # Movie details card
+│   │   ├── ReviewsSection.tsx    # User reviews list
+│   │   └── SearchInput.tsx       # IMDb ID search
+│   ├── types/
+│   │   └── movie.ts              # TypeScript interfaces
+│   ├── globals.css               # Global styles & animations
+│   ├── layout.tsx                # Root layout + metadata
+│   └── page.tsx                  # Main page component
+├── __tests__/                    # Jest test files
+├── public/                       # Static assets
+├── .env.example                  # Environment template
+├── jest.config.js                # Jest configuration
+├── next.config.ts                # Next.js config (images)
+└── package.json
+```
 
 ---
 
@@ -122,91 +201,74 @@ npm start
 
 ```
 User enters "tt0133093"
-  → /movie/tt0133093 (Next.js Server Component)
-      ├─ fetchMovieById()     → OMDB API  → title, poster, cast, rating, plot
-      ├─ findTmdbId()         → TMDB API  → TMDB movie ID
-      ├─ fetchDetailedCast()  → TMDB API  → cast with photos & character names
-      └─ fetchReviews()       → TMDB API  → up to 15 audience reviews
-                                      ↓
-                          analyzeReviews() → OpenRouter (Gemini 2.0 Flash)
-                                      ↓
-                      { summary, sentiment } displayed in InsightPanel
+      ↓
+/api/movie?id=tt0133093
+      ↓
+   ┌──────────────────────────────────────┐
+   │  Scrape IMDb in parallel:            │
+   │  ├─ Movie details page               │
+   │  ├─ Full credits page (cast)         │
+   │  └─ Reviews page                     │
+   └──────────────────────────────────────┘
+      ↓
+Return MovieData to frontend
+      ↓
+/api/insights (POST)
+      ↓
+   ┌──────────────────────────────────────┐
+   │  OpenRouter (Llama 3.1):             │
+   │  Analyze reviews → Generate:         │
+   │  ├─ Sentiment summary                │
+   │  ├─ Classification & score           │
+   │  ├─ Key themes                       │
+   │  └─ Recommendation                   │
+   └──────────────────────────────────────┘
+      ↓
+Display results in animated UI
 ```
-
----
-
-## Project Structure
-
-```
-imdb-insight/
-├── app/
-│   ├── api/
-│   │   ├── movie/[imdbId]/
-│   │   │   ├── route.ts          # Movie metadata (OMDB + TMDB cast)
-│   │   │   └── reviews/route.ts  # Audience reviews (TMDB)
-│   │   └── insights/route.ts     # AI sentiment (OpenRouter)
-│   ├── movie/[imdbId]/
-│   │   ├── page.tsx              # Movie details (Server Component)
-│   │   ├── loading.tsx           # Skeleton loading state
-│   │   └── error.tsx             # Error boundary
-│   ├── not-found.tsx             # 404 page
-│   ├── layout.tsx                # Root layout + metadata
-│   ├── page.tsx                  # Home/search page
-│   └── globals.css               # Global styles + glassmorphism tokens
-├── components/
-│   ├── BackgroundEffect.tsx      # Animated gradient orbs + particles
-│   ├── SearchBar.tsx             # Animated input with validation
-│   ├── MovieHero.tsx             # Poster, title, rating, genres
-│   ├── CastGrid.tsx              # Scrollable cast with profile photos
-│   ├── PlotSection.tsx           # Plot summary card
-│   ├── InsightPanel.tsx          # AI summary + sentiment badge
-│   └── SentimentBadge.tsx        # Positive/mixed/negative pill
-├── lib/
-│   ├── omdb.ts                   # OMDB API client
-│   ├── tmdb.ts                   # TMDB API client
-│   ├── gemini.ts                 # OpenRouter AI client
-│   └── validators.ts             # Zod schemas + IMDb ID validation
-├── types/
-│   └── index.ts                  # TypeScript interfaces
-└── __tests__/
-    ├── validators.test.ts
-    ├── SentimentBadge.test.tsx
-    └── SearchBar.test.tsx
-```
-
----
-
-## Design System
-
-The UI uses a **dark cinematic glassmorphism** design language:
-
-- **Frosted glass panels** — `backdrop-filter: blur(20px)` with translucent backgrounds
-- **Animated gradient orbs** — Three slowly drifting blurred color blobs
-- **Floating particles** — CSS-animated dots rising through the viewport
-- **Film grain texture** — Subtle SVG noise overlay for cinematic feel
-- **Gold & crimson accents** — Warm, premium color palette
-- **Animated gradient borders** — Conic-gradient rotation on key panels
-- **Poster glow** — Pulsing box-shadow on movie posters
-- **Staggered animations** — Elements fade in sequentially on load
 
 ---
 
 ## Assumptions
 
-- TMDB is used as a secondary data source — some older/obscure movies may not have TMDB entries (the app falls back gracefully)
-- AI sentiment analysis requires at least 1 TMDB review; if none exist, "No reviews found" is shown instead of an error
-- OMDB free tier allows 1,000 requests/day — sufficient for demo/evaluation
-- OpenRouter's free Gemini 2.0 Flash model is used for lowest latency; responses are JSON-parsed with a fallback if the model returns malformed output
-- The TMDB API key field accepts the **v4 Bearer token** (not the short v3 API key)
+1. **IMDb Structure**: The web scraping logic assumes IMDb's HTML structure remains consistent. May require updates if IMDb changes their markup.
+
+2. **API Availability**: OpenRouter API is expected to be available. The app includes comprehensive fallback sentiment analysis using keyword matching if AI is unavailable.
+
+3. **Rate Limiting**: No rate limiting implemented for demo purposes. Production deployment should add rate limiting middleware.
+
+4. **Review Quality**: AI analysis quality depends on the number and quality of reviews available for each movie.
+
+5. **Browser Support**: Modern browsers (Chrome, Firefox, Safari, Edge) with JavaScript enabled.
 
 ---
 
-## API Keys — Quick Guide
+## Known Limitations
 
-| Service | URL | Note |
-|---|---|---|
-| OMDB | https://www.omdbapi.com/apikey.aspx | Email verification required |
-| TMDB | https://www.themoviedb.org/settings/api | Use "API Read Access Token" (v4), not the short key |
-| OpenRouter | https://openrouter.ai/keys | Instant, free models available |
-#   B R E W  
- 
+- Web scraping may occasionally fail if IMDb blocks requests or changes structure
+- Free tier AI models may have variable response times
+- Some older or obscure movies may have limited review data
+- Images from IMDb may require `unoptimized` flag in Next.js Image
+
+---
+
+## Future Improvements
+
+- [ ] Add Redis caching for frequently searched movies
+- [ ] Implement rate limiting for production
+- [ ] Add user authentication for saving favorites
+- [ ] Support TV series and episodes
+- [ ] Add movie comparison feature
+- [ ] Implement PWA features (offline support)
+- [ ] Add search history
+- [ ] Implement share functionality
+
+---
+
+## License
+
+MIT License - feel free to use this project for learning and development.
+
+---
+
+Built with ❤️ using Next.js, Tailwind CSS, and AI
