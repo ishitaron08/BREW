@@ -271,4 +271,4 @@ MIT License - feel free to use this project for learning and development.
 
 ---
 
-Built with ❤️ using Next.js, Tailwind CSS, and AI
+Built with ❤️ using Next.js, Tailwind CSS, and AI.
